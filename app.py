@@ -15,9 +15,9 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 BASE_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1"
 CHAT_MODEL = "qwen-plus"
 API_KEY_ENV = "DASHSCOPE_API_KEY"
-#BASE_URL = "https://cloud.fastgpt.cn/api" # 注意：这里填你实际看到的接口基础地址
-#CHAT_MODEL = "家护家电客服"
-#API_KEY_ENV = "FASTGPT_API_KEY"
+# BASE_URL = "https://cloud.fastgpt.cn/api" # 注意：这里填你实际看到的接口基础地址
+# CHAT_MODEL = "家护家电客服"
+# API_KEY_ENV = "FASTGPT_API_KEY"
 
 api_key = os.getenv(API_KEY_ENV) # 改从 FASTGPT_API_KEY 环境变量读取
 
@@ -31,18 +31,7 @@ if not api_key:
     raise RuntimeError(f"没有读取到环境变量 {API_KEY_ENV}")
 
 client = OpenAI(api_key=api_key, base_url=BASE_URL)
-completion = client.chat.completions.create(
-    model=CHAT_MODEL,
-    messages=[
-        {"role": "system", "content": "你是专业的家护家电客服，请基于产品资料诚恳回答。如果不知道，如实说不知道。"},
-        {"role": "user", "content": req.message}
-    ],
-    temperature=0.3,
-    # 关键：指定知识库
-    extra_body={
-        "datasets": ["你找到的知识库ID"]   # 替换成真实的ID
-    }
-)
+
 class ChatRequest(BaseModel):
     message: str
 
